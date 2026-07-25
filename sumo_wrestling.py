@@ -1,0 +1,142 @@
+########## DEFINITION OF TERMS ############
+'''
+
+    - The definition of terms will be used for shortening variables,
+      so that writing code shall become more efficient and not all
+      variables need to be typed in full. If the variable wont be used
+      frequently anyway, it will be typed with its full name.
+
+    - P1 is short for Player 1
+    - P2 is short for Player 2
+    - FS is short for Fighting Spirit, practically the hitpoints
+    - MP is short for Momentum Points, practically energy
+
+'''
+###########################################
+
+# Simply the introduction to the game, no need to 
+# call this over and over, only once in the beginning
+# is enough.
+
+introduction = '''!! SUMO WRESTLING !!
+-------------------------------------------------------------------------------------
+This is a 2 player game where you take turns with your opponent taking actions. 
+
+- Objective: Knockout your opponent's Fighting Spirit [FS] through different Techniques
+- Techniques: Powerful techniques that require Momentum Points [MP]
+- Momentum Points: A resource that can be gained when using [Build Momentum]
+
+[Note # 1] Matches only lasts 10 Rounds. 
+[Note # 2] The player with the highest Fighting Spirit [FS] wins
+-------------------------------------------------------------------------------------
+'''
+print(introduction)
+
+###########################################
+
+# Easier to read code if listing moves is a separate function, 
+# especially considering the size of the text.
+
+def list_moves():
+    techniques_list = '''
+Techniques List:
+═════════════════════════════════════════════
+[1] Build Momentum      	  Restores 1 MP
+[2] Thrust Attack       	  Deal 12 damage
+[3] Stake Technique     	  Deal 36 damage; Cost: 1 MP
+[4] Pushing Attack      	  Deal 50 damage; Cost: 2 MP
+[5] Vajra Toss          	  KO the opponent; Cost: 3 MP
+[6] Block               	  Blocks all attacks except for Vajra Toss
+[7] Vajra Block         	  Blocks Vajra Toss only
+═════════════════════════════════════════════
+'''
+    print(techniques_list)
+
+############################################
+
+# Though will_play() and continue_game() serve the same purpose, 
+# they take in different inputs, and it's easier to just write 
+# different functions for each.
+
+def will_play():
+    question = '''[1] Start Game 
+[2] Exit
+
+'''
+    user_input = input(f"{question}Enter: ")
+    if user_input == '1':
+        return True
+    elif user_input == '2':
+        return False
+    else:
+        print("Invalid option. Please select only [1] or [2]")
+        return will_play()
+
+def continue_game():
+    question = '''Play Again?
+[Y] Yes
+[N] No
+
+'''
+    user_input = input(f"{question}Enter: ")
+    if user_input == 'Y':
+        return True
+    elif user_input == 'N':
+        return False
+    else:
+        print("Invalid option. Please select only [Y] or [N]")
+        return continue_game()
+
+###########################################
+
+def get_name(player_number):
+    name = input(f"- Enter P{player_number} Name (Default is \"P{player_number}\"): ")
+    if len(name) > 0:
+        return name
+    else:
+        return "P" + player_number
+
+###########################################
+# Fix formatting later
+def display_statistics(p1,p2,p1_fs,p2_fs,p1_mp,p2_mp):
+    print(f"{p1}\t\t{p2}")
+    print(f"FS:{p1_fs}\t\tFS:{p2_fs}")
+    print(f"MP:{p2_mp}\t\tMP:{p2_mp}")
+    return
+
+###########################################
+
+def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
+    if round_number > 10:
+        print("\t\t!! Time's Up !!")
+        if p1_hp > p2_hp:
+            return p1
+        elif p2_hp > p1_hp:
+            return p2
+        else:
+            return
+    print("\n\t    ","=" * 10, "ROUND", round_number, "=" * 10, end="\n\n")
+
+    display_statistics(p1,p2,p1_hp,p2_hp,p1_mp,p2_mp)
+    list_moves()
+
+##########################################
+
+def main_game(game_played):
+    if not game_played:
+        if not will_play():
+            return
+        # Match Registration
+        print('=' * 45,"\nMatch Registration")
+        player_one = get_name('1')
+        player_two = get_name('2')
+        print('=' * 45)
+        # print(f"Player One: {player_one}\nPlayer Two: {player_two}")
+    
+    print("\n\t=== GET READY FOR THE NEXT BATTLE! ===")
+    winner = next_round(player_one, player_two, 100, 0, 100, 0, 1)
+
+##########################################
+
+# Main start to the game
+main_game(False)
