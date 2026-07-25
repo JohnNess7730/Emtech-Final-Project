@@ -6,8 +6,10 @@
       variables need to be typed in full. If the variable wont be used
       frequently anyway, it will be typed with its full name.
 
-    - P1 is short for Player 1
-    - P2 is short for Player 2
+    - Typically, the letter P would signify "Player",
+      for example: P1 and P2 stand for Player 1 and Player 2 respectively,
+      and p_move stands for player's move. 
+      
     - FS is short for Fighting Spirit, practically the hitpoints
     - MP is short for Momentum Points, practically energy
 
@@ -106,6 +108,17 @@ def display_statistics(p1,p2,p1_fs,p2_fs,p1_mp,p2_mp):
 
 ###########################################
 
+def move(player,mp):
+    # Currently does NOT account for type errors.
+    p_move = int(input(f"Enter {player}'s Move: "))
+    if (p_move == 5 and mp <3) or (p_move == 4 and mp < 2) or (p_move == 3 and mp < 1):
+        print("[Error: Move Invalid] Not Enough Momentum [MP]\n")
+    elif p_move > 0 and p_move < 8:
+        return p_move
+    else:
+        print("[Error: Invalid Input] Enter Only [1] to [7]")
+    return move(player,mp)
+
 def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
     if round_number > 10:
         print("\t\t!! Time's Up !!")
@@ -119,6 +132,10 @@ def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
 
     display_statistics(p1,p2,p1_hp,p2_hp,p1_mp,p2_mp)
     list_moves()
+
+    p1_move = move(p1,p1_mp)
+    p2_move = move(p2,p2_mp)
+    if p1_move > p2_move:
 
 ##########################################
 
