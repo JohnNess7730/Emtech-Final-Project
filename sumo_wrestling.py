@@ -110,7 +110,12 @@ def display_statistics(p1,p2,p1_fs,p2_fs,p1_mp,p2_mp):
 
 def move(player,mp):
     # Currently does NOT account for type errors.
-    p_move = int(input(f"Enter {player}'s Move: "))
+    p_move = input(f"Enter {player}'s Move: ")
+    if not p_move.isdigit():
+        print("[Error: Invalid Input] Enter Only [1] to [7]")
+        return move(player,mp)
+    p_move = int(p_move)
+
     if (p_move == 5 and mp <3) or (p_move == 4 and mp < 2) or (p_move == 3 and mp < 1):
         print("[Error: Move Invalid] Not Enough Momentum [MP]\n")
     elif p_move > 0 and p_move < 8:
@@ -118,6 +123,40 @@ def move(player,mp):
     else:
         print("[Error: Invalid Input] Enter Only [1] to [7]")
     return move(player,mp)
+
+def move_id(id):
+    if move == 1:
+        return "[Build Momentum]"
+    if move == 2:
+        return "[Thrust Attack]"
+    if move == 3:
+        return "[Stake Technique]"
+    if move == 4:
+        return "[Pushing Attack]"
+    if move == 5:
+        return "[Vajra Toss]"
+    if move == 6:
+        return "[Block]"
+    if move == 7:
+        return "[Vajra Block]"
+
+def print_move(player,move):
+    print(player,end=' ')
+    if move < 3 or move > 5:
+        print(f"used {move_id(move)}",end=' ')
+        if move == 1:
+            print("and restores 1 MP")
+        else:
+            print()
+        return
+    
+    if move == 3:
+        momentum = 1
+    elif move == 4:
+        momentum = 2
+    else:
+        momentum = 3
+    print(f"consumes {momentum} Momentum to use {move_id(move)}")
 
 def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
     if round_number > 10:
@@ -135,7 +174,15 @@ def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
 
     p1_move = move(p1,p1_mp)
     p2_move = move(p2,p2_mp)
-    if p1_move > p2_move:
+    
+    print_move(p1,p1_move)
+    print_move(p2,p2_move)
+
+    if p2_move > p1_move:
+        if p2_move == 7:
+            if p1_move == 5:
+                p1_mp -= 3
+                print("")
 
 ##########################################
 
