@@ -158,8 +158,13 @@ def print_move(player,move):
         momentum = 3
     print(f"consumes {momentum} Momentum to use {move_id(move)}")
 
-def receive_action(action, actor, recepient):
-    print(f"{actor}'s ")
+def receive_action(actor, actor_move, receiver, receiver_move):
+    if (actor_move == 6 and (receiver_move = 2 or receiver_move == 3 or receiver_move == 4)) or (actor_move == 7 and receiver_move == 5):
+        return f"{receiver}'s {receiver_move} was blocked"
+    if actor_move == 5:
+        return f"{receiver} loses all Fighting Spirit and gets KO'd"
+    if actor_move == 4
+        return f"{receiver} loses 50 Fighting Spirit"
 
 def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
     if round_number > 10:
@@ -184,8 +189,14 @@ def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
 
     if p1_move > p2_move:
         print(f"{p1}'s {move_id(p1_move)} WINS against {p2}'s {move_id(p2_move)}")
+
+        if p1_move == 6 and (p2_move == 3 or p2_move == 4):
+            print(f"{p2}'s {move_id(p2_move)} was blocked")
+
     elif p2_move > p1_move:
         print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
+        if p2_move == 6 and (p1_move == 3 or p2_move == 4)
+            print()
     else:
         print(f"Both {p1} and {p2} used {p1_move}")
 
