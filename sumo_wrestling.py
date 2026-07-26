@@ -125,19 +125,19 @@ def move(player,mp):
     return move(player,mp)
 
 def move_id(id):
-    if move == 1:
+    if id == 1:
         return "[Build Momentum]"
-    if move == 2:
+    if id == 2:
         return "[Thrust Attack]"
-    if move == 3:
+    if id == 3:
         return "[Stake Technique]"
-    if move == 4:
+    if id == 4:
         return "[Pushing Attack]"
-    if move == 5:
+    if id == 5:
         return "[Vajra Toss]"
-    if move == 6:
+    if id == 6:
         return "[Block]"
-    if move == 7:
+    if id == 7:
         return "[Vajra Block]"
 
 def print_move(player,move):
@@ -158,6 +158,9 @@ def print_move(player,move):
         momentum = 3
     print(f"consumes {momentum} Momentum to use {move_id(move)}")
 
+def receive_action(action, actor, recepient):
+    print(f"{actor}'s ")
+
 def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
     if round_number > 10:
         print("\t\t!! Time's Up !!")
@@ -174,15 +177,20 @@ def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
 
     p1_move = move(p1,p1_mp)
     p2_move = move(p2,p2_mp)
-    
+    # print(type(p2_move), type(p2_move))
+
     print_move(p1,p1_move)
     print_move(p2,p2_move)
 
-    if p2_move > p1_move:
-        if p2_move == 7:
-            if p1_move == 5:
-                p1_mp -= 3
-                print("")
+    if p1_move > p2_move:
+        print(f"{p1}'s {move_id(p1_move)} WINS against {p2}'s {move_id(p2_move)}")
+    elif p2_move > p1_move:
+        print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
+    else:
+        print(f"Both {p1} and {p2} used {p1_move}")
+
+
+    return next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number + 1)
 
 ##########################################
 
