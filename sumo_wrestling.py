@@ -158,14 +158,6 @@ def print_move(player,move):
         momentum = 3
     print(f"consumes {momentum} Momentum to use {move_id(move)}")
 
-def receive_action(actor, actor_move, receiver, receiver_move):
-    if (actor_move == 6 and (receiver_move = 2 or receiver_move == 3 or receiver_move == 4)) or (actor_move == 7 and receiver_move == 5):
-        return f"{receiver}'s {receiver_move} was blocked"
-    if actor_move == 5:
-        return f"{receiver} loses all Fighting Spirit and gets KO'd"
-    if actor_move == 4
-        return f"{receiver} loses 50 Fighting Spirit"
-
 def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
     if round_number > 10:
         print("\t\t!! Time's Up !!")
@@ -195,10 +187,10 @@ def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
 
     elif p2_move > p1_move:
         print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
-        if p2_move == 6 and (p1_move == 3 or p2_move == 4)
+        if p2_move == 6 and (p1_move == 3 or p2_move == 4):
             print()
     else:
-        print(f"Both {p1} and {p2} used {p1_move}")
+        print(f"Both {p1} and {p2} used {move_id(p1_move)}")
 
 
     return next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number + 1)
@@ -222,4 +214,7 @@ def main_game(game_played):
 ##########################################
 
 # Main start to the game
-main_game(False)
+try:
+    main_game(False)
+except KeboardInterrupt:
+    print("\nKeyboardInterrupt")
