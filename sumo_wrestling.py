@@ -1,19 +1,3 @@
-########## DEFINITION OF TERMS ############
-'''
-
-    - The definition of terms will be used for shortening variables,
-      so that writing code shall become more efficient and not all
-      variables need to be typed in full. If the variable wont be used
-      frequently anyway, it will be typed with its full name.
-
-    - Typically, the letter P would signify "Player",
-      for example: P1 and P2 stand for Player 1 and Player 2 respectively,
-      and p_move stands for player's move. 
-      
-    - FS is short for Fighting Spirit, practically the hitpoints
-    - MP is short for Momentum Points, practically energy
-
-'''
 ###########################################
 
 # Simply the introduction to the game, no need to 
@@ -59,12 +43,12 @@ Techniques List:
 # Though will_play() and continue_game() serve the same purpose, 
 # they take in different inputs, and it's easier to just write 
 # different functions for each.
-
+'''
 def will_play():
-    question = '''[1] Start Game 
+    question = ''\'[1] Start Game 
 [2] Exit
 
-'''
+''\'
     user_input = input(f"{question}Enter: ")
     if user_input == '1':
         return True
@@ -75,11 +59,11 @@ def will_play():
         return will_play()
 
 def continue_game():
-    question = '''Play Again?
+    question = ''\'Play Again?
 [Y] Yes
 [N] No
 
-'''
+''\'
     user_input = input(f"{question}Enter: ")
     if user_input == 'Y':
         return True
@@ -88,6 +72,41 @@ def continue_game():
     else:
         print("Invalid option. Please select only [Y] or [N]")
         return continue_game()
+'''
+
+###########################################
+# ABOVE FUNCTION REWRITTEN TO FIT THE "no recursion" STANDARD
+
+def will_play(game_played):
+    
+    valid_input = False
+
+    if game_played:
+        question = '''Play Again?
+[Y] Yes
+[N] No
+
+'''
+        while not valid_input:
+            user_input = input(f"{question}Enter: ")
+            if user_input == 'Y':
+                return True
+            elif user_input == 'N':
+                return False
+            print("Invalid option. Please select only [Y] or [N]")
+
+    question = '''[1] Start Game 
+[2] Exit
+
+'''
+    while not valid_input:
+        user_input = input(f"{question}Enter: ")
+        if user_input == '1':
+            return True
+        elif user_input == '2':
+            return False
+        print("Invalid option. Please select only [1] or [2]")
+
 
 ###########################################
 
@@ -99,15 +118,7 @@ def get_name(player_number):
         return "P" + player_number
 
 ###########################################
-# Fix formatting later
-def display_statistics(p1,p2,p1_fs,p2_fs,p1_mp,p2_mp):
-    print(f"{p1}\t\t{p2}")
-    print(f"FS:{p1_fs}\t\tFS:{p2_fs}")
-    print(f"MP:{p2_mp}\t\tMP:{p2_mp}")
-    return
-
-###########################################
-
+'''
 def move(player,mp):
     # Currently does NOT account for type errors.
     p_move = input(f"Enter {player}'s Move: ")
@@ -123,7 +134,7 @@ def move(player,mp):
     else:
         print("[Error: Invalid Input] Enter Only [1] to [7]")
     return move(player,mp)
-
+'''
 def move_id(id):
     if id == 1:
         return "[Build Momentum]"
@@ -140,24 +151,9 @@ def move_id(id):
     if id == 7:
         return "[Vajra Block]"
 
-def print_move(player,move):
-    print(player,end=' ')
-    if move < 3 or move > 5:
-        print(f"used {move_id(move)}",end=' ')
-        if move == 1:
-            print("and restores 1 MP")
-        else:
-            print()
-        return
-    
-    if move == 3:
-        momentum = 1
-    elif move == 4:
-        momentum = 2
-    else:
-        momentum = 3
-    print(f"consumes {momentum} Momentum to use {move_id(move)}")
+#########################################
 
+'''
 def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
     if round_number > 10:
         print("\t\t!! Time's Up !!")
@@ -194,27 +190,167 @@ def next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number):
 
 
     return next_round(p1, p2, p1_hp, p1_mp, p2_hp, p2_mp, round_number + 1)
+'''
 
 ##########################################
 
-def main_game(game_played):
-    if not game_played:
-        if not will_play():
-            return
-        # Match Registration
-        print('=' * 45,"\nMatch Registration")
-        player_one = get_name('1')
-        player_two = get_name('2')
-        print('=' * 45)
-        # print(f"Player One: {player_one}\nPlayer Two: {player_two}")
+def get_move(player,mp):
+
+    input_valid = False
     
+    while not input_valid:
+    
+        move = input(f"Enter {player}'s Move: ")
+        if not move.isdigit():
+            print("[Error: Invalid Input] Enter Only [1] to [7]\n")
+        else:
+            move = int(move)
+            if (move == 5 and mp <3) or (move == 4 and mp < 2) or (move == 3 and mp < 1):
+                print("[Error: Move Invalid] Not Enough Momentum [MP]\n")
+            elif move == 1 and mp > 4:
+                print("[Error: Move Invalid] Momentum [MP] Capped at 5.")
+            elif move > 0 and move < 8:
+                return move
+            else:
+                print("[Error: Invalid Input] Enter Only [1] to [7]\n")
+
+
+##########################################
+
+def use_momentum(player,move):
+    momentum = 0
+    if move == 1:
+        momentum = -1
+    if move == 3:
+        momentum = 1
+    if move == 4:
+        momentum = 2
+    if move == 5:
+        momentum = 3
+    
+    if momentum < 0:
+        print(f"{player} used [Build Momentum] and restores 1 Momentum [MP].")
+    elif momentum > 0:
+        print(f"{player} consumes {momentum} Momentum [MP] to use {move_id(move)}")
+    else:
+        print(f"{player} used {move_id(move)}")
+    return momentum
+
+######################################
+
+def reduce_fs(move):
+    if move == 2:
+        return 12
+    if move == 3:
+        return 36
+    if move == 4:
+        return 50
+    return 0
+
+######################################
+
+def display_stats(p1,p2,p1_hp,p2_hp,p1_mp,p2_mp):
+    print(f"\t║ \t{p1}\t║\t║ \t{p2}\t║")
+    print(f"\t║ FS: [{p1_hp}/100]\t║\t║ FS: [{p2_hp}/100]\t║")
+    print(f"\t║ MP: [{p1_mp}/5]\t║\t║ MP: [{p2_mp}/5]\t║")
+
+###########################################
+def main_game(p1,p2):    
     print("\n\t=== GET READY FOR THE NEXT BATTLE! ===")
-    winner = next_round(player_one, player_two, 100, 0, 100, 0, 1)
+
+    round = 0
+    players_alive = True
+
+    p1_hp = 100
+    p2_hp = 100
+    p1_mp = 0
+    p2_mp = 0
+
+    while round < 10 and players_alive:
+        round += 1
+        print("\n\t    ","=" * 10, "ROUND", round, "=" * 10, end="\n\n")
+        
+        display_stats(p1,p2,p1_hp,p2_hp,p1_mp,p2_mp)
+        list_moves()
+        
+        if round % 2 == 1:
+            p1_move = get_move(p1,p1_mp)
+            p2_move = get_move(p2,p2_mp)
+        else:
+            p2_move = get_move(p2,p2_mp)
+            p1_move = get_move(p1,p1_mp)
+
+        print("═════════════════════════════════════════════") 
+        p1_mp -= use_momentum(p1,p1_move)
+        p2_mp -= use_momentum(p1,p2_move)
+        print("═════════════════════════════════════════════") 
+
+        if p1_move > p2_move or (p1_move == 5 and p2_move != 7):
+            print(f"{p1}'s {move_id(p1_move)} WINS against {p2}'s {move_id(p2_move)}")
+        elif p2_move > p1_move or (p2_move == 5 and p1_move != 7):
+            print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
+        else:
+            print(f"Both players used {move_id(p1_move)}")
+        
+        if p1_move == p2_move and (not (p1_move > 1 and p1_move < 5) and not (p2_move > 1 and p2_move < 5)):
+            print("DRAW! Nothing else happens")
+        elif (p1_move == 6 and (p2_move > 1 and p2_move < 5)) or (p1_move == 7 and p2_move == 5):
+            print(f"{p2}'s {p2_move} was blocked")
+        elif (p2_move == 6 and (p1_move > 1 and p1_move < 5)) or (p2_move == 7 and p1_move == 5):
+            print(f"{p1}'s {p1_move} was blocked")
+        elif p1_move == 5:
+            print(f"{p2} loses all Fighting Spirit and gets KO'd")
+            p2_hp = 0
+        elif p2_move == 5:
+            print(f"{p1} loses all Fighting Spirit and gets KO'd")
+            p1_hp = 0
+        else:
+            if p1_move > p2_move:
+                print(f"{p2} loses {reduce_fs(p1_move)} Fighting Spirit")
+                p2_hp -= reduce_fs(p1_move)
+                if p2_hp > 0:
+                    print(f"{p1} loses {reduce_fs(p2_move)} Fighting Spirit")
+                    p1_hp -= reduce_fs(p2_move)
+            else:
+                print(f"{p1} loses {reduce_fs(p2_move)} Fighting Spirit")
+                p1_hp -= reduce_fs(p2_move)
+                if p1_hp > 0:
+                    print(f"{p2} loses {reduce_fs(p1_move)} Fighting Spirit")
+                    p2_hp -= reduce_fs(p1_move)
+        
+        if p1_hp <= 0:
+            p1_hp = 0
+            players_alive = False
+        if p2_hp <= 0:
+            players_alive = False
+            p2_hp = 0
+    
+    print("\n")
+    display_stats(p1,p2,p1_hp,p2_hp,p1_mp,p2_mp)
+    if round == 10:
+        print("\n\t\t\t!! TIME'S UP !!")
+    if p1_hp > p2_hp:
+        print(f"\n\t\t\t!! {p1} WINS !!\n")
+    elif p2_hp > p1_hp:
+        print(f"\n\t\t\t!! {p2} WINS !!\n")
+    else:
+        print("\n\t\t\t !! DRAW !!\n")
 
 ##########################################
 
 # Main start to the game
+
 try:
-    main_game(False)
-except KeboardInterrupt:
+    game_played = False
+    while will_play(game_played):
+        if not game_played:
+            print('=' * 45,"\nMatch Registration")
+            p1 = get_name('1')
+            p2 = get_name('2')
+            print('=' * 45)
+        
+        main_game(p1,p2)
+        game_played = True
+
+except KeyboardInterrupt:
     print("\nKeyboardInterrupt")
