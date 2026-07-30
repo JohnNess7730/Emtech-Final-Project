@@ -348,7 +348,7 @@ def main_game(p1,p2):
 
 # Main start to the game
 game_played = False
-'''
+
 while will_play(game_played):
     if not game_played:
         print('=' * 45,"\nMatch Registration")
@@ -361,7 +361,6 @@ while will_play(game_played):
 
 # I ALMOST FORGOT TO REMOVE MY TRY EXCEPT HAHAHAHAH
 '''
-
 try:
     game_played = False
     while will_play(game_played):
@@ -376,4 +375,4 @@ try:
 
 except KeyboardInterrupt:
     print("\nKeyboardInterrupt")
-
+'''
