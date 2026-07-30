@@ -284,20 +284,26 @@ def main_game(p1,p2):
         p1_mp -= use_momentum(p1,p1_move)
         p2_mp -= use_momentum(p1,p2_move)
         print("═════════════════════════════════════════════") 
-
-        if p1_move > p2_move or (p1_move == 5 and p2_move != 7):
-            print(f"{p1}'s {move_id(p1_move)} WINS against {p2}'s {move_id(p2_move)}")
-        elif p2_move > p1_move or (p2_move == 5 and p1_move != 7):
-            print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
-        else:
+        if p1_move == p2_move:
             print(f"Both players used {move_id(p1_move)}")
         
-        if p1_move == p2_move and (not (p1_move > 1 and p1_move < 5) and not (p2_move > 1 and p2_move < 5)):
+        elif (p1_move > p2_move and p1_move < 6) or (p1_move == 6 and p2_move > 1 and p2_move < 5) or (p1_move == 7 and p2_move == 5):
+            print(f"{p1}'s {move_id(p1_move)} WINS against {p2}'s {move_id(p2_move)}")
+        else:
+            print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
+
+        '''
+        elif p1_move > p2_move or (p1_move == 5 and p2_move != 7) or (p1_move > 1 and p1_move < 5 and p2_move !=6):
+            print(f"{p1}'s {move_id(p1_move)} WINS against {p2}'s {move_id(p2_move)}")
+        elif p2_move > p1_move or (p2_move == 5 and p1_move != 7) or (p2_move > 1 and p2_move < 5 and p1_move !=6):
+            print(f"{p2}'s {move_id(p2_move)} WINS against {p1}'s {move_id(p1_move)}")
+        '''
+        if p1_move == p2_move:
             print("DRAW! Nothing else happens")
         elif (p1_move == 6 and (p2_move > 1 and p2_move < 5)) or (p1_move == 7 and p2_move == 5):
-            print(f"{p2}'s {p2_move} was blocked")
+            print(f"{p2}'s {move_id(p2_move)} was blocked")
         elif (p2_move == 6 and (p1_move > 1 and p1_move < 5)) or (p2_move == 7 and p1_move == 5):
-            print(f"{p1}'s {p1_move} was blocked")
+            print(f"{p1}'s {move_id(p1_move)} was blocked")
         elif p1_move == 5:
             print(f"{p2} loses all Fighting Spirit and gets KO'd")
             p2_hp = 0
@@ -306,15 +312,17 @@ def main_game(p1,p2):
             p1_hp = 0
         else:
             if p1_move > p2_move:
-                print(f"{p2} loses {reduce_fs(p1_move)} Fighting Spirit")
-                p2_hp -= reduce_fs(p1_move)
-                if p2_hp > 0:
+                if p1_move > 1 and p1_move < 5:
+                    print(f"{p2} loses {reduce_fs(p1_move)} Fighting Spirit")
+                    p2_hp -= reduce_fs(p1_move)
+                if p2_hp > 0 and p2_move > 1 and p2_move < 5:
                     print(f"{p1} loses {reduce_fs(p2_move)} Fighting Spirit")
                     p1_hp -= reduce_fs(p2_move)
             else:
-                print(f"{p1} loses {reduce_fs(p2_move)} Fighting Spirit")
-                p1_hp -= reduce_fs(p2_move)
-                if p1_hp > 0:
+                if p2_move > 1 and p2_move < 5:
+                    print(f"{p1} loses {reduce_fs(p2_move)} Fighting Spirit")
+                    p1_hp -= reduce_fs(p2_move)
+                if p1_hp > 0 and p1_move > 1 and p1_move < 5:
                     print(f"{p2} loses {reduce_fs(p1_move)} Fighting Spirit")
                     p2_hp -= reduce_fs(p1_move)
         
@@ -327,7 +335,7 @@ def main_game(p1,p2):
     
     print("\n")
     display_stats(p1,p2,p1_hp,p2_hp,p1_mp,p2_mp)
-    if round == 10:
+    if round == 10 and players_alive:
         print("\n\t\t\t!! TIME'S UP !!")
     if p1_hp > p2_hp:
         print(f"\n\t\t\t!! {p1} WINS !!\n")
@@ -339,6 +347,20 @@ def main_game(p1,p2):
 ##########################################
 
 # Main start to the game
+game_played = False
+'''
+while will_play(game_played):
+    if not game_played:
+        print('=' * 45,"\nMatch Registration")
+        p1 = get_name('1')
+        p2 = get_name('2')
+        print('=' * 45)
+        
+    main_game(p1,p2)
+    game_played = True
+
+# I ALMOST FORGOT TO REMOVE MY TRY EXCEPT HAHAHAHAH
+'''
 
 try:
     game_played = False
@@ -354,3 +376,4 @@ try:
 
 except KeyboardInterrupt:
     print("\nKeyboardInterrupt")
+
